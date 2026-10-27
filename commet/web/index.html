@@ -44,23 +44,6 @@
 
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <style id="splash-screen-style">
     html {
       height: 100%
@@ -153,7 +136,16 @@
         },
         onEntrypointLoaded: function (engineInitializer) {
           engineInitializer.initializeEngine().then(function (appRunner) {
-            appRunner.runApp();
+            return appRunner.runApp();
+          }).then(function () {
+            if (typeof removeSplashFromWeb === 'function') {
+              removeSplashFromWeb();
+            }
+          }).catch(function (err) {
+            console.error("Flutter engine failed to load:", err);
+            if (typeof removeSplashFromWeb === 'function') {
+              removeSplashFromWeb();
+            }
           });
         }
       });

@@ -34,6 +34,7 @@ RUN flutter build web --release \
     --dart-define BUILD_MODE=release \
     --dart-define VERSION_TAG=${VERSION_TAG} \
     --dart-define GIT_HASH=${GIT_HASH} \
+    --dart-define FLUTTER_WEB_CANVASKIT_URL=canvaskit/ \
     --source-maps
 
 # ==============================================================================
