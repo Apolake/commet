@@ -1,0 +1,17 @@
+{
+    # Optional email for Let's Encrypt expiry notifications
+    email {$ACME_EMAIL:admin@example.com}
+}
+
+# The domain configured in your .env file
+{$DOMAIN:localhost} {
+    encode gzip zstd
+
+    # Proxy to the commet container
+    reverse_proxy commet:80 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}

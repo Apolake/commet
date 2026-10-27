@@ -1,0 +1,59 @@
+services:
+  commet:
+    container_name: commet-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        VERSION_TAG: ${VERSION_TAG:-v0.5.0}
+    image: commet-web:latest
+    restart: unless-stopped
+    ports:
+      # Exposes Commet on the host port specified in .env (default: 8080)
+      - "${COMMET_PORT:-${PORT:-8080}}:80"
+    environment:
+      # Default Matrix homeserver configured for users at login
+      - DEFAULT_HOMESERVER=${DEFAULT_HOMESERVER:-matrix.org}
+      # Optional calendar widget host
+      - CALENDAR_WIDGET=${CALENDAR_WIDGET:-calendar-widget.commet.chat}
+    networks:
+      - commet-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Optional automated TLS/HTTPS reverse proxy using Caddy.
+  # Enable by running: docker compose --profile https up -d
+  caddy:
+    container_name: commet-caddy
+    image: caddy:alpine
+    restart: unless-stopped
+    profiles:
+      - https
+    ports:
+      # Configurable HTTP and HTTPS host ports
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+      - ACME_EMAIL=${ACME_EMAIL:-admin@example.com}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - commet
+    networks:
+      - commet-net
+
+networks:
+  commet-net:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

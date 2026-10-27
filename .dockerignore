@@ -1,0 +1,25 @@
+**/.git
+**/.github
+**/.vscode
+**/.idea
+**/build/
+**/target/
+**/.dart_tool/
+**/.last_build_id
+**/*.log
+**/*.lock.db
+
+# Exclude test fixtures and driver tests from Docker build context
+**/test_driver/
+**/integration_test/
+
+# Native intermediate caches
+commet/.vodozemac/
+commet/.livekit/
+
+# Build artifacts and archives
+*.tar.gz
+*.zip
+*.apk
+*.flatpak
+*.msix
