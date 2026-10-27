@@ -8,7 +8,7 @@ services:
     image: commet-web:prebuilt
     restart: unless-stopped
     ports:
-      - "${COMMET_PORT:-${PORT:-8080}}:80"
+      - "${COMMET_PORT:-${PORT:-28080}}:80"
     environment:
       - DEFAULT_HOMESERVER=${DEFAULT_HOMESERVER:-matrix.org}
       - CALENDAR_WIDGET=${CALENDAR_WIDGET:-calendar-widget.commet.chat}

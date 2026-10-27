@@ -31,9 +31,9 @@ fi
 # Source .env
 export $(grep -v '^#' .env | xargs -d '\n' 2>/dev/null || true)
 
-COMMET_PORT=${COMMET_PORT:-${PORT:-8080}}
-HTTP_PORT=${HTTP_PORT:-80}
-HTTPS_PORT=${HTTPS_PORT:-443}
+COMMET_PORT=${COMMET_PORT:-${PORT:-28080}}
+HTTP_PORT=${HTTP_PORT:-280}
+HTTPS_PORT=${HTTPS_PORT:-2443}
 DEFAULT_HOMESERVER=${DEFAULT_HOMESERVER:-matrix.org}
 
 echo "Building and starting container(s)..."

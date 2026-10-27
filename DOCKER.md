@@ -18,7 +18,7 @@ Deploying the [Commet](https://commet.chat) Matrix web client on your VPS using 
    ./deploy.sh
    ```
 
-Commet will build and run on `http://<your-vps-ip>:8080` (or whatever `COMMET_PORT` is specified in `.env`).
+Commet will build and run on `http://<your-vps-ip>:28080` (or whatever `COMMET_PORT` is specified in `.env`).
 
 ---
 
@@ -35,7 +35,7 @@ If you already use **Nginx Proxy Manager**, **Traefik**, **Caddy**, or a **Cloud
 
 2. Edit `.env` to configure your preferred ports and Matrix homeserver:
    ```env
-   COMMET_PORT=8080
+   COMMET_PORT=28080
    DEFAULT_HOMESERVER=matrix.org
    ```
 
@@ -44,7 +44,7 @@ If you already use **Nginx Proxy Manager**, **Traefik**, **Caddy**, or a **Cloud
    docker compose up -d --build
    ```
 
-4. Configure your reverse proxy to forward traffic to `http://127.0.0.1:8080` (or your configured `COMMET_PORT`).
+4. Configure your reverse proxy to forward traffic to `http://127.0.0.1:28080` (or your configured `COMMET_PORT`).
 
 ---
 
@@ -61,8 +61,8 @@ If you have a domain pointed to your VPS IP and want a turn-key setup with autom
    ```env
    DOMAIN=chat.yourdomain.com
    ACME_EMAIL=admin@yourdomain.com
-   HTTP_PORT=80
-   HTTPS_PORT=443
+   HTTP_PORT=280
+   HTTPS_PORT=2443
    DEFAULT_HOMESERVER=matrix.org
    ```
 
@@ -100,9 +100,9 @@ All settings in [.env](file:///C:/Users/Otaku/Desktop/Work/commet/commet/.env.ex
 
 | Variable | Default | Description |
 |---|---|---|
-| `COMMET_PORT` / `PORT` | `8080` | Host port to expose Commet directly (standalone mode) |
-| `HTTP_PORT` | `80` | Host HTTP port for Caddy / ACME Let's Encrypt challenge verification |
-| `HTTPS_PORT` | `443` | Host HTTPS port for Caddy TLS/SSL encrypted traffic |
+| `COMMET_PORT` / `PORT` | `28080` | Host port to expose Commet directly (standalone mode) |
+| `HTTP_PORT` | `280` | Host HTTP port for Caddy / ACME Let's Encrypt challenge verification |
+| `HTTPS_PORT` | `2443` | Host HTTPS port for Caddy TLS/SSL encrypted traffic |
 | `DEFAULT_HOMESERVER` | `matrix.org` | Matrix homeserver pre-filled in the login screen |
 | `CALENDAR_WIDGET` | `calendar-widget.commet.chat` | Host domain for the calendar widget |
 | `DOMAIN` | `localhost` | Domain name when using the automatic HTTPS profile (`caddy`) |

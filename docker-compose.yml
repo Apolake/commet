@@ -10,8 +10,8 @@ services:
     image: commet-web:latest
     restart: unless-stopped
     ports:
-      # Exposes Commet on the host port specified in .env (default: 8080)
-      - "${COMMET_PORT:-${PORT:-8080}}:80"
+      # Exposes Commet on the host port specified in .env (default: 28080)
+      - "${COMMET_PORT:-${PORT:-28080}}:80"
     environment:
       # Default Matrix homeserver configured for users at login
       - DEFAULT_HOMESERVER=${DEFAULT_HOMESERVER:-matrix.org}
@@ -35,9 +35,9 @@ services:
     profiles:
       - https
     ports:
-      # Configurable HTTP and HTTPS host ports
-      - "${HTTP_PORT:-80}:80"
-      - "${HTTPS_PORT:-443}:443"
+      # Configurable HTTP and HTTPS host ports (defaults: 280 and 2443)
+      - "${HTTP_PORT:-280}:80"
+      - "${HTTPS_PORT:-2443}:443"
     environment:
       - DOMAIN=${DOMAIN:-localhost}
       - ACME_EMAIL=${ACME_EMAIL:-admin@example.com}
