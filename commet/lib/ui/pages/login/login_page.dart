@@ -45,6 +45,7 @@ class LoginPageState extends State<LoginPage> {
   double? progress;
   List<LoginFlow>? loginFlows;
   Client? loginClient;
+  Future<MatrixClient>? _initClientFuture;
 
   final Debouncer homeserverUpdateDebouncer = Debouncer(
     delay: const Duration(seconds: 1),
@@ -57,12 +58,13 @@ class LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     var internalId = RandomUtils.getRandomString(20);
-    MatrixClient.create(internalId).then((client) {
+    _initClientFuture = MatrixClient.create(internalId).then((client) {
       loginClient = client;
 
       progressSubscription = loginClient!.connectionStatusChanged.stream.listen(
         onLoginProgressChanged,
       );
+      return client;
     });
 
     super.initState();
@@ -168,21 +170,62 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Future<void> updateHomeserver(String input) async {
-    if (loginClient == null) return;
+    if (loginClient == null && _initClientFuture != null) {
+      await _initClientFuture;
+    }
 
-    setState(() {
-      loginFlows = null;
-      loadingServerInfo = true;
-      isServerValid = false;
-    });
+    if (loginClient == null) {
+      if (mounted) {
+        setState(() {
+          loadingServerInfo = false;
+        });
+      }
+      return;
+    }
 
-    var uri = Uri.https(input);
-    var result = await loginClient!.setHomeserver(uri);
+    if (mounted) {
+      setState(() {
+        loginFlows = null;
+        loadingServerInfo = true;
+        isServerValid = false;
+      });
+    }
 
-    setState(() {
-      loadingServerInfo = false;
-      isServerValid = result.$1;
-      loginFlows = result.$2;
-    });
+    try {
+      final sanitized = input
+          .trim()
+          .replaceAll(RegExp(r'^https?://'), '')
+          .replaceAll(RegExp(r'/+$'), '');
+
+      if (sanitized.isEmpty) {
+        if (mounted) {
+          setState(() {
+            loadingServerInfo = false;
+            isServerValid = false;
+            loginFlows = null;
+          });
+        }
+        return;
+      }
+
+      var uri = Uri.https(sanitized);
+      var result = await loginClient!.setHomeserver(uri);
+
+      if (mounted) {
+        setState(() {
+          loadingServerInfo = false;
+          isServerValid = result.$1;
+          loginFlows = result.$2;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          loadingServerInfo = false;
+          isServerValid = false;
+          loginFlows = null;
+        });
+      }
+    }
   }
 }
