@@ -50,6 +50,13 @@ class SettingsCategoryAbout implements SettingsCategory {
           )
       ]);
 
+  static String get gitHashShort {
+    if (BuildConfig.GIT_HASH.length >= 7) {
+      return BuildConfig.GIT_HASH.substring(0, 7);
+    }
+    return BuildConfig.GIT_HASH;
+  }
+
   static Widget info(BuildContext context) {
     return SizedBox(
       child: Wrap(
@@ -57,7 +64,7 @@ class SettingsCategoryAbout implements SettingsCategory {
         children: [
           const tiamat.Text.label(BuildConfig.VERSION_TAG),
           const tiamat.Text.label(" · "),
-          tiamat.Text.label(BuildConfig.GIT_HASH.substring(0, 7)),
+          tiamat.Text.label(gitHashShort),
           const tiamat.Text.label(" · "),
           Text.rich(
             TextSpan(
@@ -151,7 +158,7 @@ class _AppInfoState extends State<_AppInfo> {
                       const tiamat.Text.labelEmphasised(
                           BuildConfig.VERSION_TAG),
                       tiamat.Text.labelLow(
-                          "${BuildConfig.GIT_HASH.substring(0, 7)} ${BuildConfig.BUILD_DETAIL}"),
+                          "${SettingsCategoryAbout.gitHashShort} ${BuildConfig.BUILD_DETAIL}"),
                       tiamat.Text.labelLow("Built: " +
                           intl.DateFormat(intl.DateFormat.YEAR_MONTH_DAY)
                               .format(BuildConfig.BUILD_DATE)),

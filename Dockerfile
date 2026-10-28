@@ -2,9 +2,9 @@
 
 ARG FLUTTER_IMAGE=ghcr.io/cirruslabs/flutter:stable
 
-# ==============================================================================
+# =============================================================================
 # Stage 1: Build Flutter Web application from source
-# ==============================================================================
+# =============================================================================
 FROM ${FLUTTER_IMAGE} AS builder
 WORKDIR /app
 
@@ -28,7 +28,7 @@ RUN dart run scripts/codegen.dart
 
 # Build optimized production Flutter Web bundle
 ARG VERSION_TAG=v0.0.0
-ARG GIT_HASH=docker
+ARG GIT_HASH=dockerv00
 RUN flutter build web --release \
     --dart-define PLATFORM=web \
     --dart-define BUILD_MODE=release \
@@ -37,9 +37,9 @@ RUN flutter build web --release \
     --dart-define FLUTTER_WEB_CANVASKIT_URL=canvaskit/ \
     --source-maps
 
-# ==============================================================================
+# =============================================================================
 # Stage 2: Production Web Server (Ultra-lightweight Nginx Alpine)
-# ==============================================================================
+# =============================================================================
 FROM nginx:alpine AS runner
 
 # Install curl, jq, bash for healthchecks and dynamic runtime configuration
@@ -63,10 +63,10 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 
-# ==============================================================================
+# =============================================================================
 # Optional Stage: Prebuilt Runner
 # Allows deploying pre-compiled build/web assets directly without compiling in Docker
-# ==============================================================================
+# =============================================================================
 FROM nginx:alpine AS prebuilt
 
 RUN apk add --no-cache curl jq bash

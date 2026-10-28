@@ -28,9 +28,11 @@ for CONFIG_PATH in $CONFIG_LOCATIONS; do
             jq --arg hs "$HOMESERVER" --arg cal "$CALENDAR" \
                '.default_homeserver = $hs | .calendar_widget = $cal' \
                "$CONFIG_PATH" > "$TMP_FILE" && mv "$TMP_FILE" "$CONFIG_PATH"
+            chmod 644 "$CONFIG_PATH"
         else
             sed -i "s/\"default_homeserver\":\s*\"[^\"]*\"/\"default_homeserver\": \"$HOMESERVER\"/g" "$CONFIG_PATH"
             sed -i "s/\"calendar_widget\":\s*\"[^\"]*\"/\"calendar_widget\": \"$CALENDAR\"/g" "$CONFIG_PATH"
+            chmod 644 "$CONFIG_PATH"
         fi
     fi
 done
@@ -45,9 +47,14 @@ if [ "$FOUND_ANY" -eq 0 ]; then
   "calendar_widget": "$CALENDAR"
 }
 EOF
+        chmod 644 "$DIR/global_config.json"
         echo "[commet-docker] Created $DIR/global_config.json"
     done
 fi
+
+# Ensure all files and directories in nginx html root are world-readable by nginx worker
+chmod -R 755 "$HTML_DIR"
+find "$HTML_DIR" -type f -exec chmod 644 {} +
 
 echo "[commet-docker] Starting Nginx..."
 exec "$@"

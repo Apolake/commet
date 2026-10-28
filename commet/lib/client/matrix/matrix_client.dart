@@ -237,6 +237,9 @@ class MatrixClient extends Client {
   }
 
   static Future<void> _checkSystem(ClientManager clientManager) async {
+    if (BuildConfig.WEB) {
+      return;
+    }
     try {
       await vod.init(wasmPath: './assets/assets/vodozemac/').timeout(const Duration(seconds: 2), onTimeout: () { throw TimeoutException('Vodozemac web assembly loading timed out'); });
       if (!vod.isInitialized()) {
