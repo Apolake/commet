@@ -1,0 +1,66 @@
+name: commet
+
+services:
+  commet:
+    container_name: commet-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        VERSION_TAG: "v0.5.0"
+    image: commet-web:latest
+    restart: unless-stopped
+    ports:
+      - "28080:80"
+    environment:
+      - DEFAULT_HOMESERVER=matrix.org
+      - CALENDAR_WIDGET=calendar-widget.commet.chat
+    networks:
+      - commet-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    x-casaos:
+      ports:
+        - container: "80"
+          description:
+            en_us: "Commet Web Client Port"
+      envs:
+        - container: DEFAULT_HOMESERVER
+          description:
+            en_us: "Default Matrix Homeserver (e.g. matrix.org or your custom server)"
+        - container: CALENDAR_WIDGET
+          description:
+            en_us: "Calendar widget domain"
+
+networks:
+  commet-net:
+    driver: bridge
+
+# CasaOS App Store & Dashboard Metadata
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: commet
+  author: Commet
+  developer: Commet Chat
+  category: Communication
+  icon: https://raw.githubusercontent.com/commetchat/commet/main/commet/assets/images/app_icon/app_icon_filled.png
+  thumbnail: https://raw.githubusercontent.com/commetchat/.github/refs/heads/main/assets/banner_demo.png
+  title:
+    en_us: Commet
+  tagline:
+    en_us: Modern, feature-rich web client for Matrix
+  description:
+    en_us: |
+      Commet is a secure, modern, and privacy-respecting client for Matrix (matrix.org).
+      Built with Flutter and Rust, featuring end-to-end encryption (E2EE), custom emojis,
+      GIF search, threads, multiple accounts, spaces, and cross-signing.
+  scheme: http
+  port_map: "28080"
+  index: "/"

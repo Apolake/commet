@@ -1,12 +1,12 @@
-# Docker Deployment Guide for Commet Web
+# Docker & CasaOS Deployment Guide for Commet Web
 
-Deploying the [Commet](https://commet.chat) Matrix web client on your VPS using Docker and Docker Compose.
+Deploying the [Commet](https://commet.chat) Matrix web client on your VPS or CasaOS home server using Docker and Docker Compose.
 
 ---
 
-## ⚡ Quick Start (1 Command)
+## ⚡ Quick Start (1 Command on VPS / Server)
 
-1. **Clone the repository on your VPS:**
+1. **Clone the repository on your server:**
    ```bash
    git clone https://github.com/commetchat/commet.git
    cd commet
@@ -18,11 +18,52 @@ Deploying the [Commet](https://commet.chat) Matrix web client on your VPS using 
    ./deploy.sh
    ```
 
-Commet will build and run on `http://<your-vps-ip>:28080` (or whatever `COMMET_PORT` is specified in `.env`).
+Commet will build and run on `http://<your-server-ip>:28080`.
 
 ---
 
-## 🚀 Deployment Options
+## 🏠 Deploying on CasaOS
+
+CasaOS natively supports custom Compose setups. There are two simple ways to deploy and build Commet directly on your CasaOS machine:
+
+### Method A: Via CasaOS Terminal / SSH (Recommended)
+
+1. Open **Terminal** in CasaOS or SSH into your CasaOS server:
+   ```bash
+   mkdir -p /DATA/AppData/commet
+   cd /DATA/AppData/commet
+   git clone https://github.com/commetchat/commet.git .
+   ```
+
+2. Build and launch with Docker Compose:
+   ```bash
+   docker compose -f docker-compose.casaos.yml up -d --build
+   ```
+
+3. CasaOS will automatically detect the app, build it locally from source, and display the **Commet** tile with its icon on your CasaOS dashboard. Clicking it opens `http://<casaos-ip>:28080`.
+
+---
+
+### Method B: Via CasaOS Web UI ("Install a customized application")
+
+1. First, make sure the project files are on your CasaOS server (e.g. in `/DATA/AppData/commet`):
+   ```bash
+   git clone https://github.com/commetchat/commet.git /DATA/AppData/commet
+   ```
+
+2. On the **CasaOS Dashboard**:
+   - Click the **`+`** icon on the top right of the apps list.
+   - Choose **"Install a customized application"**.
+   - Click the **"Import"** button at the top right of the popup dialog.
+   - Select **"File"** and upload `docker-compose.casaos.yml`, or copy & paste the contents of `docker-compose.casaos.yml`.
+   - In the `build: context:` field, ensure it points to `/DATA/AppData/commet`.
+   - Click **Submit**.
+
+CasaOS will build the container directly and add Commet to your dashboard with full icon, description, and link bindings.
+
+---
+
+## 🚀 VPS Deployment Options
 
 ### Option 1: Standalone (Behind an existing Reverse Proxy)
 
