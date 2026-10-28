@@ -8,7 +8,7 @@ Deploying the [Commet](https://commet.chat) Matrix web client on your VPS or Cas
 
 1. **Clone the repository on your server:**
    ```bash
-   git clone https://github.com/commetchat/commet.git
+   git clone https://github.com/Apolake/commet.git
    cd commet
    ```
 
@@ -32,7 +32,7 @@ CasaOS natively supports custom Compose setups. There are two simple ways to dep
    ```bash
    mkdir -p /DATA/AppData/commet
    cd /DATA/AppData/commet
-   git clone https://github.com/commetchat/commet.git .
+   git clone https://github.com/Apolake/commet.git .
    ```
 
 2. Build and launch with Docker Compose:
@@ -48,7 +48,7 @@ CasaOS natively supports custom Compose setups. There are two simple ways to dep
 
 1. First, make sure the project files are on your CasaOS server (e.g. in `/DATA/AppData/commet`):
    ```bash
-   git clone https://github.com/commetchat/commet.git /DATA/AppData/commet
+   git clone https://github.com/Apolake/commet.git /DATA/AppData/commet
    ```
 
 2. On the **CasaOS Dashboard**:
